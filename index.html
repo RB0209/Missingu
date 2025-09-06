@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>I Miss You</title>
+  <style>
+    body {display:flex; align-items:center; justify-content:center; height:100vh; background:#ffe6f0; margin:0;}
+    .box {
+      width:200px; height:200px; background:#ff6b8a;
+      display:flex; align-items:center; justify-content:center;
+      border-radius:20px; color:white; font-size:20px; font-family:sans-serif;
+      cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,0.2);
+      transition:transform .2s;
+    }
+    .box:hover {transform:scale(1.05);}
+    #videoPlayer {display:none; text-align:center;}
+    video {max-width:90vw; max-height:80vh; border-radius:16px;}
+  </style>
+</head>
+<body>
+  <div id="intro">
+    <div class="box" onclick="showVideo()">💌 Open Surprise</div>
+  </div>
+
+  <div id="videoPlayer">
+    <video controls autoplay>
+      <source src="miss-you.mp4" type="video/mp4">
+      Your browser doesn’t support video.
+    </video>
+  </div>
+
+  <script>
+    function showVideo() {
+      document.getElementById('intro').style.display = 'none';
+      document.getElementById('videoPlayer').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
