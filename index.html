@@ -4,17 +4,40 @@
   <meta charset="UTF-8">
   <title>I Miss You</title>
   <style>
-    body {display:flex; align-items:center; justify-content:center; height:100vh; background:#ffe6f0; margin:0;}
+    body {
+      display:flex; align-items:center; justify-content:center;
+      height:100vh; background:#ffe6f0; margin:0;
+      font-family:sans-serif;
+    }
     .box {
       width:200px; height:200px; background:#ff6b8a;
       display:flex; align-items:center; justify-content:center;
-      border-radius:20px; color:white; font-size:20px; font-family:sans-serif;
+      border-radius:20px; color:white; font-size:20px;
       cursor:pointer; box-shadow:0 10px 30px rgba(0,0,0,0.2);
       transition:transform .2s;
     }
     .box:hover {transform:scale(1.05);}
-    #videoPlayer {display:none; text-align:center;}
-    video {max-width:90vw; max-height:80vh; border-radius:16px;}
+    #videoPlayer {display:none; position:relative; text-align:center;}
+    video {
+      max-width:90vw; max-height:80vh;
+      border-radius:16px;
+      display:block;
+    }
+    /* Crying emoji layer */
+    .emoji-layer {
+      position:absolute; inset:0;
+      pointer-events:none; /* don’t block clicks */
+      overflow:hidden;
+    }
+    .emoji {
+      position:absolute; top:-40px;
+      font-size:28px; opacity:0.9;
+      animation:fall linear forwards;
+    }
+    @keyframes fall {
+      0%   {transform:translateY(0) rotate(0deg);}
+      100% {transform:translateY(120vh) rotate(360deg); opacity:0;}
+    }
   </style>
 </head>
 <body>
@@ -23,16 +46,45 @@
   </div>
 
   <div id="videoPlayer">
-    <video controls autoplay>
+    <video id="vid" controls autoplay>
       <source src="miss-you.mp4" type="video/mp4">
       Your browser doesn’t support video.
     </video>
+    <div class="emoji-layer" id="emojiLayer"></div>
   </div>
 
   <script>
+    const video = document.getElementById('vid');
+    const emojiLayer = document.getElementById('emojiLayer');
+    let emojiInterval;
+
     function showVideo() {
       document.getElementById('intro').style.display = 'none';
       document.getElementById('videoPlayer').style.display = 'block';
+    }
+
+    // When video starts, begin crying emoji rain
+    video.addEventListener('play', () => {
+      emojiInterval = setInterval(spawnEmoji, 500);
+    });
+
+    // Stop when paused or ended
+    video.addEventListener('pause', () => {
+      clearInterval(emojiInterval);
+    });
+    video.addEventListener('ended', () => {
+      clearInterval(emojiInterval);
+    });
+
+    function spawnEmoji() {
+      const emoji = document.createElement('span');
+      emoji.className = 'emoji';
+      emoji.textContent = '😢';
+      emoji.style.left = Math.random() * 90 + 'vw';
+      emoji.style.fontSize = (20 + Math.random()*20) + 'px';
+      emoji.style.animationDuration = (4 + Math.random()*3) + 's';
+      emojiLayer.appendChild(emoji);
+      setTimeout(()=>emoji.remove(), 8000);
     }
   </script>
 </body>
